@@ -1,0 +1,10 @@
+<section class="page-heading"><div><p class="eyebrow">CONSULTA EXTERNA</p><h1>Usuarios de la API</h1><p>Ejemplo de consulta de un directorio remoto para el portal académico.</p></div><button class="button secondary" (click)="cargar()" [disabled]="cargando">{{ cargando ? 'Consultando…' : 'Volver a consultar' }}</button></section>
+<div class="info-note">Estos usuarios son datos ficticios de JSONPlaceholder. No representan estudiantes de ISIL ni solicitudes registradas.</div>
+<section class="panel">
+  <div class="panel-heading"><h2>Directorio de práctica</h2><span class="badge" *ngIf="consultaRealizada">{{ usuarios.length }} usuarios</span></div>
+  <div class="empty-state" *ngIf="cargando" role="status"><h3>Consultando usuarios…</h3><p>Estamos esperando la respuesta de la API.</p></div>
+  <div class="empty-state" *ngIf="error" role="alert"><h3>No pudimos cargar el directorio</h3><p>{{ error }}</p><button class="button" (click)="cargar()">Reintentar</button></div>
+  <div class="empty-state" *ngIf="consultaRealizada && usuarios.length === 0"><h3>Sin usuarios</h3><p>La API respondió con una lista vacía.</p></div>
+  <div class="table-wrap" *ngIf="usuarios.length > 0"><table><caption class="sr-only">Usuarios obtenidos de la API REST</caption><thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Correo</th></tr></thead><tbody><tr *ngFor="let usuario of usuarios"><td>{{ usuario.id }}</td><td><strong>{{ usuario.name }}</strong></td><td>{{ usuario.username }}</td><td>{{ usuario.email }}</td></tr></tbody></table></div>
+</section>
+<p class="session-note">Fuente: <a [href]="usuariosApi.url" target="_blank" rel="noopener noreferrer">JSONPlaceholder /users ↗</a></p>

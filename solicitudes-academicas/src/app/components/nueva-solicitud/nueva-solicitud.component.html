@@ -1,0 +1,20 @@
+<section class="page-heading"><div><p class="eyebrow">REGISTRO</p><h1>Nueva solicitud</h1><p>Cuéntanos qué necesitas. Todos los campos son obligatorios.</p></div></section>
+<div class="form-layout">
+  <section class="panel form-panel">
+    <div *ngIf="mensaje" class="success" role="status"><strong>{{ mensaje }}</strong><p>Estado inicial: Pendiente.</p><button type="button" (click)="verSolicitudes()">Ver mis solicitudes →</button></div>
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <h2>Datos del estudiante</h2>
+      <div class="field"><label for="estudiante">Nombre completo</label><input id="estudiante" formControlName="estudiante" autocomplete="name" placeholder="Ej. Estudiante de prueba" maxlength="80" [attr.aria-invalid]="invalido('estudiante')" aria-describedby="error-estudiante"><small id="error-estudiante" class="error" *ngIf="invalido('estudiante')">Escribe un nombre de 3 a 80 caracteres, no solo espacios.</small></div>
+      <div class="field-row">
+        <div class="field"><label for="codigo">Código de estudiante</label><input id="codigo" formControlName="codigo" inputmode="numeric" placeholder="Ej. 20260001" maxlength="8" [attr.aria-invalid]="invalido('codigo')" aria-describedby="ayuda-codigo error-codigo"><small id="ayuda-codigo">Usa 8 dígitos.</small><small id="error-codigo" class="error" *ngIf="invalido('codigo')">El código debe contener exactamente 8 números.</small></div>
+        <div class="field"><label for="correo">Correo electrónico</label><input id="correo" formControlName="correo" type="email" autocomplete="email" placeholder="estudiante@example.com" maxlength="120" [attr.aria-invalid]="invalido('correo')" aria-describedby="error-correo"><small id="error-correo" class="error" *ngIf="invalido('correo')">Ingresa un correo válido de hasta 120 caracteres.</small></div>
+      </div>
+      <h2 class="section-divider">Detalle de la solicitud</h2>
+      <div class="field"><label for="tipo">Tipo de solicitud</label><select id="tipo" formControlName="tipo" [attr.aria-invalid]="invalido('tipo')" aria-describedby="error-tipo"><option value="">Selecciona una opción</option><option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option></select><small id="error-tipo" class="error" *ngIf="invalido('tipo')">Selecciona un tipo de solicitud.</small></div>
+      <div class="field"><label for="motivo">Motivo</label><textarea id="motivo" formControlName="motivo" rows="5" maxlength="500" placeholder="Explica el motivo de tu solicitud..." [attr.aria-invalid]="invalido('motivo')" aria-describedby="ayuda-motivo error-motivo"></textarea><small id="ayuda-motivo">Entre 20 y 500 caracteres. {{ formulario.controls.motivo.value.length }}/500</small><small id="error-motivo" class="error" *ngIf="invalido('motivo')">Describe el motivo con al menos 20 caracteres, sin contar espacios al inicio o al final.</small></div>
+      <p *ngIf="enviado && formulario.invalid" class="error" role="alert">Revisa los campos señalados antes de registrar.</p>
+      <div class="form-actions"><button class="button" type="submit" [disabled]="!!mensaje">Registrar solicitud</button><a routerLink="/solicitudes">Volver al listado</a></div>
+    </form>
+  </section>
+  <aside class="help-card"><span class="eyebrow">ANTES DE REGISTRAR</span><h2>Una solicitud clara es más fácil de revisar.</h2><p>Verifica tu código y correo. En el motivo, incluye el curso o trámite y explica lo que necesitas.</p><hr><h3>¿Qué puedes solicitar?</h3><ul><li>Constancia de estudios</li><li>Cambio de horario</li><li>Revisión de nota</li></ul><p class="small">Demostración académica. Usa datos ficticios para las pruebas y la exposición.</p></aside>
+</div>

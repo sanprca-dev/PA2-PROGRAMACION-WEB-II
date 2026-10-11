@@ -1,0 +1,27 @@
+<section class="page-heading">
+  <div><p class="eyebrow">TU ESPACIO ACADÉMICO</p><h1>Mis solicitudes</h1><p>Consulta los registros que has creado durante esta sesión.</p></div>
+  <a class="button" routerLink="/nueva-solicitud">+ Nueva solicitud</a>
+</section>
+<div class="stats">
+  <section class="stat"><span>Total de solicitudes</span><strong>{{ solicitudes.length }}</strong><small>Registradas en esta sesión</small></section>
+  <section class="stat"><span>Pendientes</span><strong>{{ pendientes }}</strong><small>A la espera de revisión</small></section>
+  <section class="stat stat-note"><span>Registro académico</span><h2>Todo empieza con una solicitud.</h2><p>Completa tus datos y describe lo que necesitas.</p></section>
+</div>
+<section class="panel">
+  <div class="panel-heading"><h2>Historial de solicitudes</h2><span class="badge">{{ solicitudes.length }} registros</span></div>
+  <div *ngIf="solicitudes.length === 0" class="empty-state">
+    <span class="empty-icon" aria-hidden="true">+</span><h3>Aún no tienes solicitudes</h3><p>Registra una constancia, un cambio de horario o una revisión de nota.</p><a routerLink="/nueva-solicitud">Crear mi primera solicitud →</a>
+  </div>
+  <div class="table-wrap" *ngIf="solicitudes.length > 0">
+    <table><caption class="sr-only">Solicitudes registradas durante la sesión</caption>
+      <thead><tr><th>Código / fecha</th><th>Estudiante</th><th>Solicitud / motivo</th><th>Estado</th></tr></thead>
+      <tbody><tr *ngFor="let solicitud of solicitudes">
+        <td><strong>{{ obtenerCodigo(solicitud.id) }}</strong><small>{{ solicitud.fecha | date:'dd/MM/yyyy HH:mm' }}</small></td>
+        <td>{{ solicitud.estudiante }}<small>{{ solicitud.codigo }} · {{ solicitud.correo }}</small></td>
+        <td><strong>{{ solicitud.tipo }}</strong><small class="motivo">{{ solicitud.motivo }}</small></td>
+        <td><span class="status">{{ solicitud.estado }}</span></td>
+      </tr></tbody>
+    </table>
+  </div>
+</section>
+<p class="session-note">Los registros se mantienen al navegar. Al recargar o cerrar la página se borran: esta primera etapa no utiliza una base de datos.</p>
