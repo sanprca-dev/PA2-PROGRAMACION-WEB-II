@@ -2,7 +2,7 @@
 
 ## Tu objetivo de hoy
 
-Al terminar podrás iniciar un servidor, crear una solicitud desde Postman, verla en MongoDB, reiniciar Node y consultarla otra vez. Tu trabajo será la base que necesitan Paola y Mariano. Esta guía contiene ejemplos para escribir y entender; todavía no existen como archivos ejecutables del backend en el repositorio.
+Al terminar podrás iniciar un servidor, crear una solicitud desde Postman, verla en MongoDB, reiniciar Node y consultarla otra vez. Tu trabajo será la base que necesitan Paola y Mariano. Esta guía explica la primera etapa del backend y cómo entregar los cambios mediante un pull request. Si ya completaste los pasos 1 al 8, continúa desde el paso 9; no vuelvas a reemplazar los archivos que ya implementaste.
 
 Trabaja en la carpeta nueva **PA2-PROGRAMACION-WEB-II**, nunca en la PA1. El frontend heredado no se modifica en esta etapa. No hace falta ejecutar Angular.
 
@@ -44,7 +44,7 @@ El remoto debe decir **PA2**, no PA1. Tu correo debe coincidir con uno verificad
 ```powershell
 git switch main
 git pull --ff-only origin main
-git switch -c codex/santiago-base-api
+git switch -c santiago-base-api
 ```
 
 **Comprobación:** `git branch --show-current` muestra tu rama. Estos comandos se ejecutan desde la raíz del nuevo repositorio.
@@ -302,34 +302,188 @@ Esperado: 201 y objeto con los campos más `_id`, `fecha` y `estado: "Pendiente"
 
 **E. Persistencia:** detener solo Node con Ctrl+C, volver a iniciar `npm.cmd run dev`, repetir GET y comprobar que aparece el mismo `_id`. No borrar documentos en Compass entre ambos pasos. Esto sí demuestra que los datos no dependían del arreglo en memoria de Node.
 
-**Capturas propias:** crear `evidencias/santiago/` en la raíz. Guardar `01-servidor-conectado.png`, `02-post-solicitud.png`, `03-compass.png`, `04-get-tras-reinicio.png` y, si ayuda, `05-validacion.png`. No mostrar credenciales. Se capturan cuando hayas realizado las pruebas, no se copian las imágenes de PA1.
+**Capturas propias:** guardar las pruebas realizadas en `evidencias/santiago/`. El paso 9 enumera los siete archivos que ya tienes. Conserva sus nombres. Para la revisión de datos, también puedes mostrar Compass durante el video. No mostrar credenciales ni copiar imágenes de PA1.
 
-## Paso 9. Revisar y subir tu primera etapa
+## Paso 9. Entregar tu primera etapa mediante un pull request
 
-Desde la raíz PA2:
+### 9.1. Ubicarte y entender el estado actual
+
+En VS Code selecciona Terminal → New Terminal / Nueva terminal. Utiliza PowerShell y ejecuta:
 
 ```powershell
-git status --short
+Set-Location 'C:\Users\sa_pr\PA2-PROGRAMACION-WEB-II'
+git status
+git branch --show-current
+git remote -v
+```
+
+Al revisar este clon el 11/10/2026, la rama era main, con el commit local `1f44eff` (Configurar servidor Express y ruta de salud), seis archivos del backend preparados para el siguiente commit y las capturas todavía sin seguimiento. Esa es la situación de partida de las instrucciones siguientes. No necesitas repetir el primer commit ni reiniciar el proyecto.
+
+Un commit guarda una versión local; push la envía a GitHub; el pull request propone incorporar una rama a main. Solo después de integrar el PR los compañeros obtienen esta etapa al actualizar main.
+
+### 9.2. Crear tu rama conservando el trabajo
+
+Si `git branch --show-current` muestra main, ejecuta:
+
+```powershell
+git switch -c santiago-base-api
+git branch --show-current
+```
+
+Ahora debe mostrar `santiago-base-api`. Crear la rama desde el punto actual conserva tu primer commit, los archivos preparados y las capturas. No uses reset ni descartes cambios. Si ya estás en `santiago-base-api`, omite la creación. Si Git dice que la rama ya existe, revisa `git branch -vv` antes de intentar otra operación: no la borres para repetir el paso.
+
+El nombre describe al responsable y su tarea. El prefijo de la guía anterior era solo una convención de nombres, no un comando adicional ni un requisito de Git. Los nombres de ramas publicados son visibles en GitHub y no acreditan por sí solos cómo se desarrolló el código. Esta guía no propone alterar autores ni reconstruir el historial.
+
+### 9.3. Completar el commit del backend
+
+Desde la raíz del proyecto:
+
+```powershell
 git check-ignore backend/.env
 git add backend/.env.example backend/config backend/models backend/controllers backend/routes backend/server.js
 git diff --cached --stat
 git diff --cached
+```
+
+`git check-ignore` debe imprimir `backend/.env`; confirma que se excluye. `.env.example` sí se comparte. Revisa que la lista preparada contenga solamente los archivos que quieres entregar y que no aparezcan .env ni node_modules. Si el visor de git diff ocupa la terminal, pulsa q para salir.
+
+Los archivos ya preparados no se duplican al volver a hacer git add. Tu package.json y package-lock.json ya estaban en el primer commit; si posteriormente los modificaste, revisa esos cambios y añádelos también antes de confirmar.
+
+```powershell
 git commit -m "Crear y listar solicitudes persistentes con MongoDB"
 ```
 
-Es normal que `git check-ignore` imprima backend/.env: debe quedar fuera. Si no sucede, revisar el .gitignore antes de continuar. No usar git add -f para subir .env.
+Ejecuta el commit si existen cambios preparados. Si ya realizaste este commit y Git dice que no hay cambios, no crees uno vacío: revisa `git log -3 --oneline` y continúa.
 
-Documenta en `docs/aporte-santiago.md` los comandos que utilizaste, las pruebas realizadas, el resultado y una dificultad resuelta. Añade las capturas cuando existan:
+### 9.4. Añadir capturas y esta guía
+
+No es necesario crear `docs/aporte-santiago.md` para este flujo. La explicación del código se realizará en el video grupal; conservarás en el repositorio las capturas y los commits de tu desarrollo. En el PR bastará un resumen breve de alcance y pruebas, no un informe adicional. El video y su enlace se completarán al preparar la entrega grupal; el video no sustituye requisitos del docente sobre README o evidencias individuales.
+
+En tu carpeta se encontraron estos archivos:
+
+| Archivo | Prueba que corresponde revisar y explicar |
+|---|---|
+| 01-servidor-conectado.png | Inicio de Express y conexión a MongoDB |
+| 02-registro-solicitud.png | POST de creación, respuesta 201 e id recibido |
+| 03-consulta-solicitud-registrada.png | GET que devuelve el documento creado |
+| 04-error-solicitud-invalida.png | Respuesta 400 ante datos inválidos |
+| 05-solicitud-invalida-no-se-registro.png | Consulta posterior sin el registro rechazado |
+| 06-prueba-persistencia-reiniciamos-node.png | Reinicio de Node para comprobar persistencia |
+| 07-comprobamos-id-sigue-registrado.png | GET después del reinicio con el mismo id |
+
+Los nombres identifican las pruebas previstas; antes de subir, abre las imágenes y confirma que el contenido sea legible y muestre esos resultados. Deben ser tus capturas de ejecución, sin contraseñas, tokens u otros datos privados.
 
 ```powershell
-git add docs/aporte-santiago.md evidencias/santiago
-git commit -m "Documentar pruebas de creacion y persistencia"
-git push -u origin codex/santiago-base-api
+git add docs/02-SANTIAGO-PASO-A-PASO.md evidencias/santiago
+git diff --cached --stat
+git diff --cached --name-only
+git commit -m "Agregar evidencias de pruebas y actualizar guia de entrega"
+git status
 ```
 
-En GitHub abre un pull request hacia main, revisa Files changed y explica cómo probaste. Cuando funcione, intégralo con **Create a merge commit**, conservando los commits. El título debe describir la primera etapa, no decir que toda la PA2 está terminada.
+En este commit deberían aparecer la guía y las siete capturas. Si hay archivos adicionales, revísalos antes de confirmar. No uses git add . para incluir cambios que no revisaste. Al terminar, se espera un árbol de trabajo limpio; .env y node_modules permanecerán ignorados.
 
-Después Paola y Mariano actualizan su base y comienzan sus partes. Si falla una prueba, corrígela antes de presentar esta etapa como lista.
+### 9.5. Subir la rama
+
+```powershell
+git push -u origin santiago-base-api
+```
+
+Este comando sube la rama, incluido el primer commit que hiciste estando en main. No integra todavía los cambios a main en GitHub. Si solicita iniciar sesión, usa tu cuenta sanprca-dev. La opción -u configura el seguimiento; para nuevos commits en esta misma rama bastará git push.
+
+Si falla por permisos o conexión, resuelve el error antes de seguir. No uses force push. No ejecutes git push origin main para este flujo.
+
+### 9.6. Abrir el pull request en GitHub
+
+Después de que termine correctamente el push:
+
+1. Abre [el repositorio PA2](https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II).
+2. Entra en la pestaña **Pull requests**.
+3. Pulsa **New pull request**.
+4. En el selector **base**, elige **main**. Es la rama que recibirá tu trabajo.
+5. En el selector **compare**, elige **santiago-base-api**. Es la rama que contiene tu avance.
+6. Revisa los archivos de la comparación y pulsa **Create pull request**.
+7. Completa el título y la descripción sugeridos abajo. Ajusta las pruebas a lo que realmente ejecutaste.
+8. Pulsa **Create pull request** para publicarlo. No necesitas asignar reviewers para abrirlo. Paola o Mariano pueden revisarlo si ya tienen acceso.
+
+También puedes abrir directamente [la comparación main ← santiago-base-api](https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II/compare/main...santiago-base-api). Ese enlace funcionará después de subir la rama.
+
+**Título sugerido:**
+
+```text
+Implementar base de API y creacion/listado de solicitudes con MongoDB
+```
+
+**Descripción para copiar y ajustar:**
+
+```markdown
+Se incorpora la primera etapa del backend: servidor Express, conexión a MongoDB,
+modelo Solicitud y rutas para crear y listar solicitudes persistentes.
+Incluye validación de datos y configuración de ejemplo del entorno.
+
+Pruebas realizadas (marcar solo las comprobadas):
+- [ ] POST válido: 201 y documento creado.
+- [ ] GET: 200 y consulta del documento registrado.
+- [ ] POST inválido: 400 y sin nuevo documento en la base.
+- [ ] Reinicio de Node: el GET conserva el mismo identificador.
+
+Capturas: evidencias/santiago/ (01 al 07).
+
+Pendiente del equipo: consulta individual, actualización, eliminación,
+usuarios y ampliación de middleware. Esta entrega corresponde a la etapa inicial.
+La explicación del código se incluirá en el video grupal.
+```
+
+Para marcar una casilla cambia `[ ]` por `[x]`. No marques pruebas pendientes. El PR explica qué cambió y cómo lo comprobaste; el video permite desarrollar la explicación del código.
+
+### 9.7. Revisar Files changed antes de integrar
+
+Dentro del PR abierto, entra a **Files changed**. GitHub muestra las líneas añadidas en verde y las eliminadas en rojo. Revisa:
+
+- backend/package.json y package-lock.json: dependencias y comandos.
+- backend/.env.example: valores de ejemplo, sin credenciales privadas.
+- backend/config/database.js: conexión a MongoDB.
+- backend/models/Solicitud.js: campos y reglas.
+- backend/controllers/solicitudesController.js: crear y listar.
+- backend/routes/solicitudesRoutes.js: GET y POST.
+- backend/server.js: configuración, rutas, errores y arranque.
+- docs/02-SANTIAGO-PASO-A-PASO.md y las siete capturas.
+
+No deberían aparecer backend/.env, node_modules ni modificaciones inesperadas del frontend. Abre las capturas para comprobar que se ven. En la pestaña **Commits**, verifica tu primer commit y los siguientes avances, asociados a tu cuenta.
+
+Si detectas un error, corrige el archivo en VS Code mientras sigues en santiago-base-api, añade solo el archivo corregido, crea un nuevo commit y ejecuta git push. El mismo PR se actualiza: no necesitas abrir otro.
+
+### 9.8. Integrar conservando tus commits
+
+1. Regresa a **Conversation** dentro del PR.
+2. Baja al cuadro de integración. Comprueba que no haya conflictos ni revisiones o verificaciones obligatorias pendientes. Si no hay pruebas automáticas configuradas, eso no significa que tu API se haya probado automáticamente.
+3. En la flecha junto al botón de integración, elige **Create a merge commit**. El botón principal puede quedar rotulado **Merge pull request**.
+4. Pulsa **Merge pull request** y después **Confirm merge**.
+5. Comprueba que el PR muestre **Merged**. Desde Code, selecciona main y confirma que ya aparecen backend y las capturas.
+
+No elijas Squash and merge ni Rebase and merge en este flujo: aquí queremos conservar los commits existentes mediante un merge. Si no aparece la opción, comprueba en Settings → General → Pull Requests que esté habilitado Allow merge commits. Si no puedes integrar por conflictos, no fuerces el proceso; revisa qué archivos entraron en conflicto.
+
+Puedes conservar la rama por ahora. No es necesario eliminarla para entregar ni para que tus compañeros continúen.
+
+### 9.9. Actualizar tu main local y entregar la base al equipo
+
+Solo después de ver Merged en GitHub, desde la raíz del proyecto:
+
+```powershell
+git status
+git switch main
+git pull --ff-only origin main
+git status
+git log -5 --oneline
+```
+
+Antes de cambiar de rama, git status debe indicar que no quedan cambios pendientes. El merge remoto incluirá tu primer commit, por lo que main local podrá avanzar conservando ese historial. Si git pull informa divergencias o conflictos, detente y revisa el estado; no uses reset --hard.
+
+Avisa a Paola y Mariano de que la primera etapa está integrada. Ellos deben actualizar main desde sus clones o forks, instalar las dependencias del backend, configurar su propio .env y MongoDB y crear sus ramas de trabajo. Sus bases de datos no se copian con Git.
+
+Para el video, muestra el recorrido servidor → ruta → controlador → modelo y demuestra creación, validación y persistencia. El README grupal y el enlace de YouTube se actualizarán al cerrar la entrega. Si otra guía todavía menciona un informe individual, para tu etapa sigue esta actualización: capturas, historial y explicación en video.
+
+Referencias de interfaz: [crear un pull request](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request?tool=webui) y [fusionar un pull request](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request?tool=webui).
 
 ## Lo que debes poder explicar sin leer
 
@@ -360,4 +514,4 @@ Después Paola y Mariano actualizan su base y comienzan sus partes. Si falla una
 - [Express 5 y Node](https://expressjs.com/en/guide/migrating-5/).
 - [Conexiones Mongoose](https://mongoosejs.com/docs/connections.html).
 
-Estas referencias aclaran detalles de herramientas; el recorrido sigue la estructura presentada por el profesor. El código de esta guía aún debe ejecutarse y verificarse en tu entorno: no se afirma una prueba de MongoDB que no se haya realizado.
+Estas referencias aclaran detalles de herramientas; el recorrido sigue la estructura presentada por el profesor. La revisión de esta guía no sustituye la ejecución de las pruebas. Las pruebas y capturas deben corresponder a resultados que tú hayas comprobado en tu entorno.
