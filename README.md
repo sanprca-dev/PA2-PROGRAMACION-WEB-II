@@ -2,7 +2,7 @@
 
 **Curso:** Programación Web II · **Código:** 30690 · **NRC:** 4060  
 **Repositorio:** [PA2-PROGRAMACION-WEB-II](https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II)
-**VIDEO:** LINK
+**VIDEO:** LINK https://youtu.be/-To7WrYy9Bw
 
 ## Descripción y objetivo
 
