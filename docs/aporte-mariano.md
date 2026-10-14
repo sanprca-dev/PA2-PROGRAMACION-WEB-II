@@ -58,4 +58,5 @@ Pendiente: agregar a la colección las peticiones de consultar, editar y elimina
 - `b364aaa` Agregar Helmet y CORS con origen configurable
 - `8af491c` Centralizar manejo de errores y responder 404 en rutas desconocidas
 
-Pull request: *pendiente*
+Pull request: [#3](https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II/pull/3)
+

@@ -26,13 +26,14 @@ El proyecto sigue en desarrollo. La consulta individual, actualización y elimin
 |---|---|---|---|---|
 | Santiago Prado Carrasco | Desarrollador | Servidor Express, conexión MongoDB, modelo Solicitud, crear/listar y pruebas de persistencia | Primera etapa completada e integrada | [PR #1](https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II/pull/1) · [Capturas](evidencias/santiago/) |
 | Paola Gutiérrez Afata | Desarrollador | Consulta individual, actualización, eliminación y validaciones del CRUD persistente | Pendiente de desarrollo e integración | PR y evidencias pendientes |
-| Mariano Valderrama Shuña | Desarrollador | Usuarios, CORS/Helmet, manejo común de errores y colección de pruebas HTTP | Pendiente de desarrollo e integración | PR y evidencias pendientes |
+| Mariano Valderrama Shuña | Desarrollador | Usuarios, CORS/Helmet, manejo común de errores y colección de pruebas HTTP | Completado, en revisión | [PR #3](https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II/pull/3) · [Capturas](evidencias/mariano/) · [Aporte](docs/aporte-mariano.md) |
+
 
 Cada integrante realizará sus cambios y commits con su propia cuenta. La explicación del código se presentará en el video grupal. Los PR y las capturas permiten revisar los avances individuales; no se requiere un archivo `docs/aporte-santiago.md` para documentar esta primera etapa.
 
 ## Tecnologías
 
-- Backend: Node.js, Express 5, Mongoose 8 y dotenv 16.
+- Backend: Node.js, Express 5, Mongoose 8, dotenv 16, Helmet 8 y cors 2.
 - Base de datos: MongoDB Community Server; Compass para visualizar los documentos.
 - Desarrollo: nodemon 3, Postman, Git y GitHub.
 - Frontend de referencia: Angular 16 de PA1.
@@ -68,9 +69,11 @@ El archivo de ejemplo contiene:
 ```dotenv
 PORT=3000
 MONGO_URI=mongodb://127.0.0.1:27017/pa2_solicitudes
+CLIENT_ORIGIN=http://127.0.0.1:4200
 ```
 
-MongoDB debe estar iniciado en el puerto configurado. Si tu instalación es diferente, ajusta tu `.env`. La base usada en las pruebas es `pa2_solicitudes` y la colección es `solicitudes`. Cada integrante configura su propia base local; los documentos de MongoDB no se descargan con Git.
+MongoDB debe estar iniciado en el puerto configurado. Si tu instalación es diferente, ajusta tu `.env`. La base usada en las pruebas es `pa2_solicitudes` y la colección es `solicitudes`. Cada integrante configura su propia base local; los documentos de MongoDB no se descargan con Git. `CLIENT_ORIGIN` es el origen del frontend que CORS autoriza.
+ 
 
 Inicia el backend desde su carpeta:
 
@@ -91,6 +94,9 @@ URL base local: `http://localhost:3000`.
 | GET | `/api/salud` | 200 con mensaje de funcionamiento HTTP |
 | POST | `/api/solicitudes` | 201 con la solicitud creada |
 | GET | `/api/solicitudes` | 200 con un array de solicitudes, ordenadas por fecha descendente |
+| POST | `/api/usuarios` | 201 con el usuario creado; 409 si el correo ya existe |
+| GET | `/api/usuarios` | 200 con un array de usuarios |
+
 
 La ruta de salud confirma respuesta HTTP; no supervisa continuamente la conexión a MongoDB. El listado devuelve `[]` cuando no hay solicitudes.
 
@@ -108,7 +114,8 @@ Para crear una solicitud en Postman, selecciona POST, Body → raw → JSON y en
 
 El servidor asigna `_id`, `fecha` y el estado inicial `Pendiente`. El código del estudiante debe contener ocho dígitos; el tipo debe ser una opción del esquema y el motivo debe tener entre 20 y 500 caracteres. Las demás reglas se encuentran en [Solicitud.js](backend/models/Solicitud.js).
 
-Los datos que incumplen el esquema y el JSON mal formado reciben 400. Los errores inesperados reciben 500 con un mensaje general. La ampliación del manejo de errores queda para la etapa de Mariano.
+Los errores se responden desde un manejador central ([errorHandler.js](backend/middlewares/errorHandler.js)): 400 para JSON mal formado, datos que incumplen el esquema o valores con tipo incorrecto; 409 para correo duplicado; 500 con un mensaje general para fallos inesperados (el detalle solo aparece en la consola). Las rutas desconocidas reciben 404 ([notFound.js](backend/middlewares/notFound.js)).
+
 
 ## Organización del backend
 
@@ -119,6 +126,11 @@ Los datos que incumplen el esquema y el JSON mal formado reciben 400. Los errore
 | [models/Solicitud.js](backend/models/Solicitud.js) | Define los campos, valores iniciales y validaciones |
 | [controllers/solicitudesController.js](backend/controllers/solicitudesController.js) | Crea y lista solicitudes mediante el modelo |
 | [routes/solicitudesRoutes.js](backend/routes/solicitudesRoutes.js) | Relaciona GET y POST con sus controladores |
+| [models/Usuario.js](backend/models/Usuario.js) | Define nombre y correo único con validaciones en español |
+| [controllers/usuariosController.js](backend/controllers/usuariosController.js) | Crea y lista usuarios; responde 409 si el correo ya existe |
+| [routes/usuariosRoutes.js](backend/routes/usuariosRoutes.js) | Relaciona GET y POST de usuarios con sus controladores |
+| [middlewares/errorHandler.js](backend/middlewares/errorHandler.js) | Manejador central de errores (400, 409 y 500) |
+| [middlewares/notFound.js](backend/middlewares/notFound.js) | Responde 404 a rutas desconocidas |
 | [.env.example](backend/.env.example) | Documenta las variables de configuración |
 
 ## Evidencias de Santiago
@@ -137,7 +149,31 @@ Las siguientes capturas corresponden a las pruebas manuales de la primera etapa:
 
 Para repetir la prueba de persistencia: crear una solicitud, copiar su `_id`, detener solo Node, volver a iniciar la API y ejecutar GET. El documento debe seguir en el listado con el mismo identificador. Mantener MongoDB activo durante este proceso.
 
-Estas son pruebas manuales; todavía no hay una suite automatizada del backend. Las evidencias de Paola y Mariano se incorporarán con sus respectivas entregas.
+Estas son pruebas manuales; todavía no hay una suite automatizada del backend. Las evidencias de Paola se incorporarán con su entrega.
+
+
+## Evidencias de Mariano
+
+Detalle de archivos, decisiones y pruebas en [aporte-mariano.md](docs/aporte-mariano.md).
+
+| Evidencia | Comprobación |
+|---|---|
+| [01. Crear usuario](evidencias/mariano/01-crear-usuario.png) | POST válido con respuesta 201 e identificador generado |
+| [02. Listar usuarios](evidencias/mariano/02-listar-usuarios.jpg) | GET con respuesta 200 y array de usuarios |
+| [03. Correo duplicado](evidencias/mariano/03-correo-duplicado.jpg) | Correo repetido con mayúsculas rechazado con 409 |
+| [04. Usuario inválido](evidencias/mariano/04-usuario-invalido.jpg) | Rechazo con 400 y mensajes de validación en español |
+| [05. Helmet](evidencias/mariano/05-helmet-cabeceras.jpg) | Cabeceras de seguridad y sin `X-Powered-By` |
+| [06. CORS permitido](evidencias/mariano/06-cors-origen-permitido.jpg) | `Access-Control-Allow-Origin` coincide con el origen configurado |
+| [07. CORS otro origen](evidencias/mariano/07-cors-otro-origen.jpg) | La cabecera no autoriza un origen distinto |
+| [08. Ruta desconocida](evidencias/mariano/08-ruta-desconocida.jpg) | Respuesta 404 en JSON |
+| [09. JSON mal formado](evidencias/mariano/09-json-mal-formado.jpg) | Respuesta 400 con mensaje comprensible |
+
+CORS lo aplica el navegador: Postman muestra la respuesta en ambos casos. CORS no autentica usuarios ni impide peticiones desde clientes que no son navegadores.
+
+## Colección de pruebas en Postman
+
+La colección [PA2.postman_collection.json](pruebas/PA2.postman_collection.json) incluye salud, crear y listar solicitudes, usuarios (crear, listar, duplicado e inválido), JSON mal formado y ruta desconocida. Para usarla: en Postman, **Import** → seleccionar el archivo. La variable de colección `baseUrl` vale `http://localhost:3000`. Las pruebas de consultar, editar y eliminar solicitudes se agregarán al integrar la etapa de Paola.
+
 
 ## Continuación del equipo
 
