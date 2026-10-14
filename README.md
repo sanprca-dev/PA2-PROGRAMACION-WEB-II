@@ -178,6 +178,10 @@ Las carpetas integradas contienen los siguientes archivos. Sus nombres identific
 | Paola | [05-estado-invalido](evidencias/paola/05-estado-invalido.png) |
 | Paola | [06a-falta-motivo](evidencias/paola/06a-falta-motivo.png) |
 | Paola | [06b-campo-extra](evidencias/paola/06b-campo-extra.png) |
+| Paola | [07-actualizar-no-existe](evidencias/paola/07-actualizar-no-existe.png) |
+| Paola | [08-eliminar](evidencias/paola/08-eliminar.png) |
+| Paola | [09-eliminar-repetido](evidencias/paola/09-eliminar-repetido.png) |
+| Paola | [10-persistencia](evidencias/paola/10-persistencia.png) |
 | Mariano | [01-crear-usuario](evidencias/mariano/01-crear-usuario.png) |
 | Mariano | [02-listar-usuarios](evidencias/mariano/02-listar-usuarios.jpg) |
 | Mariano | [03-correo-duplicado](evidencias/mariano/03-correo-duplicado.jpg) |
@@ -197,7 +201,7 @@ Las carpetas integradas contienen los siguientes archivos. Sus nombres identific
 
 La colección exportada contiene nueve peticiones. Aún no incorpora GET, PUT y DELETE de solicitudes por id; esas rutas ya están implementadas y pueden probarse manualmente usando un `_id` real. Falta incorporar esas peticiones a la colección y documentar su ejecución conjunta.
 
-Las capturas de Paola incluyen consulta, actualización y validaciones. No se incluyen aún capturas de DELETE, repetición del DELETE ni persistencia después de editar/eliminar; conviene completar esas evidencias antes de cerrar la entrega. La implementación integrada no equivale a afirmar que todas las pruebas finales hayan sido ejecutadas.
+Las capturas de Paola incluyen consulta, actualización y validaciones. Las capturas de Paola incluyen consulta por id, actualización, eliminación, repetición del DELETE y persistencia tras reiniciar Node, además de las validaciones. La matriz completa está en [aporte-paola.md](docs/aporte-paola.md).; conviene completar esas evidencias antes de cerrar la entrega. La implementación integrada no equivale a afirmar que todas las pruebas finales hayan sido ejecutadas.
 
 ## Documentación del proyecto
 
