@@ -2,7 +2,7 @@
 
 **Parte asignada:** completar el CRUD de solicitudes (consulta individual, actualización y eliminación) con validaciones.
 
-**Rama:** `codex/paola-crud-solicitudes` · **PR:** _(pegar enlace del pull request)_
+**Rama:** `codex/paola-crud-solicitudes` · **PR:** _(https://github.com/sanprca-dev/PA2-PROGRAMACION-WEB-II/pull/4)_
 
 ## Archivos modificados
 
