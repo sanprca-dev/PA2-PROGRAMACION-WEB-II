@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const conectarDB = require('./config/database');
 const solicitudesRoutes = require('./routes/solicitudesRoutes');
+const usuariosRoutes = require('./routes/usuariosRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -10,6 +12,8 @@ app.use(express.json());
 app.get('/api/salud', (req, res) => {
   res.json({ mensaje: 'API PA2 funcionando' });
 });
+app.use('/api/usuarios', usuariosRoutes);
+
 app.use('/api/solicitudes', solicitudesRoutes);
 
 // Mariano ampliará y separará este manejador en su etapa.
