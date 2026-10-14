@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
 const conectarDB = require('./config/database');
 const solicitudesRoutes = require('./routes/solicitudesRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
@@ -7,7 +9,10 @@ const usuariosRoutes = require('./routes/usuariosRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(helmet());
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://127.0.0.1:4200' }));
 app.use(express.json());
+
 
 app.get('/api/salud', (req, res) => {
   res.json({ mensaje: 'API PA2 funcionando' });
